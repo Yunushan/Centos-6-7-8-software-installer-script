@@ -1,5 +1,4 @@
 #!/bin/bash
-sudo yum update -y
 
 # Variables
 cpuarch=`uname -m`
@@ -19,7 +18,11 @@ Please enter your choice(s): '
 while :
 do
 clear
-options=("PHP7.1 ${opts[1]}" "Nginx ${opts[2]}" "FFMPEG 3.4 ${opts[3]}" "GCC4.8 - 8.2 From Source ${opts[4]}" "G++ ${opts[5]}" "Cmake ${opts[6]}" "VLC ${opts[7]}" "Done ${opts[8]}")
+options=("PHP7.1 ${opts[1]}" "Nginx ${opts[2]}" "FFMPEG 3.4 ${opts[3]}" "GCC4.8 - 8.2 From Source ${opts[4]}" "G++ ${opts[5]}" "Cmake ${opts[6]}" "VLC ${opts[7]}"
+"Apache2 ${opts[8]}" "Monitoring Tools ${opts[9]}" "Transmission-cli ${opts[10]}" "Nmap ${opts[11]}" "Irssi (IRC) ${opts[12]}" "Timeshift ${opts[13]}" 
+"Jenkins ${opts[14]}" "Docker ${opts[15]}" "Weechat (IRC) ${opts[16]}" "Quassel (IRC) ${opts[17]}" "Neofetch ${opts[18]}" "GNU Emacs ${opts[19]}" 
+"Kubectl ${opts[20]}" "Magic Wormhole ${opts[21]}" "Neovim ${opts[22]}" "OpenJDK 8 JDK ${opts[23]}" "OpenJDK 11 JDK ${opts[24]}" "Oracle Java 8 JDK ${opts[25]}"
+"Oracle Java 11 JDK ${opts[26]}" "Done ${opts[27]}")
     select opt in "${options[@]}"
     do
         case $opt in
@@ -51,10 +54,86 @@ options=("PHP7.1 ${opts[1]}" "Nginx ${opts[2]}" "FFMPEG 3.4 ${opts[3]}" "GCC4.8 
                 choice 7
                 break
                 ;;
-            "Done ${opts[8]}")
+            "Apache2 ${opts[8]}")
+                choice 8
+                break
+                ;;
+            "Monitoring Tools ${opts[9]}")
+                choice 9
+                break
+                ;;
+            "Transmission-cli ${opts[10]}")
+                choice 10
+                break
+                ;;
+            "Nmap ${opts[11]}")
+                choice 11
+                break
+                ;;
+            "Irssi (IRC) ${opts[12]}")
+                choice 12
+                break
+                ;;
+            "Timeshift ${opts[13]}")
+                choice 13
+                break
+                ;;
+            "Jenkins ${opts[14]}")
+                choice 14
+                break
+                ;;
+            "Docker ${opts[15]}")
+                choice 15
+                break
+                ;;
+            "Weechat (IRC) ${opts[16]}")
+                choice 16
+                break
+                ;;
+            "Quassel (IRC) ${opts[17]}")
+                choice 17
+                break
+                ;;
+            "Neofetch ${opts[18]}")
+                choice 18
+                break
+                ;;
+            "GNU Emacs ${opts[19]}")
+                choice 19
+                break
+                ;;
+            "Kubectl ${opts[20]}")
+                choice 20
+                break
+                ;;
+            "Magic Wormhole ${opts[21]}")
+                choice 21
+                break
+                ;;
+            "Neovim ${opts[22]}")
+                choice 22
+                break
+                ;;
+            "OpenJDK 8 JDK ${opts[23]}")
+                choice 23
+                break
+                ;;
+            "OpenJDK 11 JDK ${opts[24]}")
+                choice 24
+                break
+                ;;
+            "Oracle Java 8 JDK ${opts[25]}")
+                choice 25
+                break
+                ;;
+            "Oracle Java 11 JDK ${opts[26]}")
+                choice 26
+                break
+                ;;
+            "Done ${opts[27]}")
                 break 2
                 ;;
-            *) printf '%s\n' 'Please Choose Between 1-8';;
+            *) printf '%s\n' 'Please Choose Between 1-27';;
         esac
     done
 done
@@ -87,21 +166,22 @@ done
 printf "\n"
 
 
-
-sudo yum install wget curl mlocate nano -y
+#Necessary Packages
+sudo yum update -y
+sudo yum install wget curl mlocate nano lynx -y
 printf "\n"
 
 # Epel and Remi Repositories Folder
 if [ -d "/root/Downloads/epel-and-remi-repositories/" ];then
 :
 else
-sudo mkdir -p /root/Downloads/epel-and-remi-repositories/
+sudo mkdir -pv /root/Downloads/epel-and-remi-repositories/
 fi
 # Downloaded tmp files
 if [ -d "/root/Downloads/TempDL/" ];then
 :
 else
-sudo mkdir -p /root/Downloads/TempDL/
+sudo mkdir -pv /root/Downloads/TempDL/
 fi
 
 # INSTALLATION BY SELECTION
@@ -211,6 +291,173 @@ sudo yum install https://download1.rpmfusion.org/free/el/rpmfusion-free-release-
 sudo yum install vlc-core -y
 sudo sed -i 's/geteuid/getppid/' /usr/bin/vlc
 ;;
+
+8)
+
+#Apache2
+sudo yum install httpd -y
+
+;;
+
+9)
+
+#Monitoring Tools
+sudo yum install htop iftop atop glances monit powertop iotop apachetop -y
+
+;;
+
+10)
+
+#Transmission-cli
+
+sudo yum install transmission-cli transmission-common transmission-daemon -y
+sudo systemctl enable transmission-daemon
+sudo systemctl start transmission-daemon
+sudo firewall-cmd --permanent --zone=public --add-port=9091/tcp
+sudo firewall-cmd --reload
+
+;;
+
+11)
+
+#Nmap
+
+if [ "$cpuarch" = "x86_64" ];then
+
+nmap64=`lynx -dump https://nmap.org/dist/ | awk '/nmap-7.*\.x86_64.rpm$/{url=$2}END{print url}'`
+sudo rpm -Uvh $nmap64
+
+elif [ "$cpuarch" = "x86" ] || [ "$cpuarch" = "i386" ] || [ "$cpuarch" = "i486" ] || [ "$cpuarch" = "i586" ] || [ "$cpuarch" = "i686" ];then
+nmap32=`lynx -dump https://nmap.org/dist/ | awk '/nmap-7.*\.i686.rpm$/{url=$2}END{print url}'`
+sudo rpm -Uvh $nmap32
+fi
+;;
+
+12)
+
+#Irssi (IRC)
+
+sudo yum install irssi -y
+;;
+
+13)
+
+#Timeshift
+
+sudo yum install timeshift -y
+;;
+
+14)
+
+#Jenkins
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+sudo yum install jenkins -y
+sudo systemctl start jenkins.service
+sudo systemctl enable jenkins.service
+sudo firewall-cmd --permanent --zone=public --add-port=8080/tcp
+sudo firewall-cmd --reload
+
+;;
+
+15)
+
+#Docker
+sudo yum install yum-utils device-mapper-persistent-data lvm2 -y
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install docker-ce docker-ce-cli containerd.io -y
+sudo systemctl start docker
+sudo systemctl enable docker
+;;
+
+16)
+
+#Weechat (IRC)
+sudo yum install weechat -y
+;;
+
+17)
+
+#Quassel (IRC)
+sudo yum install quassel -y
+;;
+
+18)
+
+#Neofetch
+sudo yum install epel-release dnf -y
+curl -o /etc/yum.repos.d/konimex-neofetch-epel-7.repo https://copr.fedorainfracloud.org/coprs/konimex/neofetch/repo/epel-7/konimex-neofetch-epel-7.repo
+sudo dnf install neofetch -y
+
+;;
+
+19)
+
+#Neofetch
+sudo yum install epel-release -y
+sudo yum install emacs -y
+;;
+
+20)
+
+#Kubectl
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+sudo yum install kubelet kubeadm kubectl -y
+sudo systemctl start kubelet 
+sudo systemctl enable kubelet
+;;
+
+21)
+
+#Magic Wormhole
+
+sudo yum install python-pip python-devel -y
+sudo pip install magic-wormhole
+;;
+
+22)
+
+#Neovim
+
+sudo yum install neovim -y
+;;
+
+23)
+
+#OpenJDK 8 JDK
+
+sudo yum install java-1.8.0-openjdk-devel -y
+;;
+
+24)
+
+#OpenJDK 11 JDK
+
+sudo yum install java-11-openjdk-devel
+;;
+
+25)
+
+#Oracle Java 8 JDK
+
+sudo yum install java-1.8.0-openjdk
+;;
+
+26)
+
+#Oracle Java 11 JDK
+sudo wget -O /root/Downloads/TempDL/jdk-11.0.2_linux-x64_bin.rpm --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie"   "http://download.oracle.com/otn-pub/java/jdk/11.0.2+9/f51449fcd52f4d52b93a989c5c56ed3c/jdk-11.0.2_linux-x64_bin.rpm"
+sudo rpm -Uvh /root/Downloads/TempDL/jdk-11.0.2_linux-x64_bin.rpm
+;;
+
         esac
     fi
 done

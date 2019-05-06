@@ -19,7 +19,8 @@ Please enter your choice(s): '
 while :
 do
 clear
-options=("PHP7.1 ${opts[1]}" "Nginx ${opts[2]}" "FFMPEG ${opts[3]}" "GCC ${opts[4]}" "G++ ${opts[5]}" "Cmake ${opts[6]}" "VLC ${opts[7]}" "Done ${opts[8]}")
+options=("PHP7.1 ${opts[1]}" "Nginx ${opts[2]}" "FFMPEG ${opts[3]}" "GCC ${opts[4]}" "G++ ${opts[5]}" "Cmake ${opts[6]}" "VLC ${opts[7]}" "Apache2 ${opts[8]}" 
+"Done ${opts[15]}")
     select opt in "${options[@]}"
     do
         case $opt in
@@ -51,10 +52,14 @@ options=("PHP7.1 ${opts[1]}" "Nginx ${opts[2]}" "FFMPEG ${opts[3]}" "GCC ${opts[
                 choice 7
                 break
                 ;;
-            "Done ${opts[8]}")
+            "Apache2 ${opts[8]}")
+                choice 8
+                break
+                ;;
+            "Done ${opts[15]}")
                 break 2
                 ;;
-            *) printf '%s\n' 'Please Choose Between 1-8';;
+            *) printf '%s\n' 'Please Choose Between 1-15';;
         esac
     done
 done
@@ -176,6 +181,13 @@ sudo wget -O /root/Downloads/TempDL/rpmfusion-free-release-6.noarch.rpm https://
 sudo yum install https://download1.rpmfusion.org/free/el/rpmfusion-free-release-6.noarch.rpm -y
 sudo yum install vlc -y
 sudo sed -i 's/geteuid/getppid/' /usr/bin/vlc
+;;
+
+8)
+
+#Apache2
+sudo yum install httpd
+
 ;;
         esac
     fi
