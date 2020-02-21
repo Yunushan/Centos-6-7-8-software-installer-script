@@ -22,7 +22,7 @@ options=("PHP7.1 ${opts[1]}" "Nginx ${opts[2]}" "FFMPEG 3.4 ${opts[3]}" "GCC4.8 
 "Apache2 ${opts[8]}" "Monitoring Tools ${opts[9]}" "Transmission-cli ${opts[10]}" "Nmap ${opts[11]}" "Irssi (IRC) ${opts[12]}" "Timeshift ${opts[13]}" 
 "Jenkins ${opts[14]}" "Docker ${opts[15]}" "Weechat (IRC) ${opts[16]}" "Quassel (IRC) ${opts[17]}" "Neofetch ${opts[18]}" "GNU Emacs ${opts[19]}" 
 "Kubectl ${opts[20]}" "Magic Wormhole ${opts[21]}" "Neovim ${opts[22]}" "OpenJDK 8 JDK ${opts[23]}" "OpenJDK 11 JDK ${opts[24]}" "Oracle Java 8 JDK ${opts[25]}"
-"Oracle Java 11 JDK ${opts[26]}" "Done ${opts[27]}")
+"Oracle Java 11 JDK ${opts[26]}" "DVBlast2.2 ${opts[27]}" "Deluge ${opts[28]}" "Done ${opts[29]}")
     select opt in "${options[@]}"
     do
         case $opt in
@@ -130,10 +130,18 @@ options=("PHP7.1 ${opts[1]}" "Nginx ${opts[2]}" "FFMPEG 3.4 ${opts[3]}" "GCC4.8 
                 choice 26
                 break
                 ;;
-            "Done ${opts[27]}")
+            "DVBlast2.2 ${opts[27]}")
+                choice 27
+                break
+                ;;
+            "Deluge ${opts[28]}")
+                choice 28
+                break
+                ;;
+            "Done ${opts[29]}")
                 break 2
                 ;;
-            *) printf '%s\n' 'Please Choose Between 1-27';;
+            *) printf '%s\n' 'Please Choose Between 1-29';;
         esac
     done
 done
@@ -441,14 +449,14 @@ sudo yum install java-1.8.0-openjdk-devel -y
 
 #OpenJDK 11 JDK
 
-sudo yum install java-11-openjdk-devel
+sudo yum install java-11-openjdk-devel -y
 ;;
 
 25)
 
 #Oracle Java 8 JDK
 
-sudo yum install java-1.8.0-openjdk
+sudo yum install java-1.8.0-openjdk -y
 ;;
 
 26)
@@ -456,6 +464,27 @@ sudo yum install java-1.8.0-openjdk
 #Oracle Java 11 JDK
 sudo wget -O /root/Downloads/TempDL/jdk-11.0.2_linux-x64_bin.rpm --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie"   "http://download.oracle.com/otn-pub/java/jdk/11.0.2+9/f51449fcd52f4d52b93a989c5c56ed3c/jdk-11.0.2_linux-x64_bin.rpm"
 sudo rpm -Uvh /root/Downloads/TempDL/jdk-11.0.2_linux-x64_bin.rpm
+;;
+
+27)
+
+#DVBlast 2.2
+sudo yum install gcc -y
+dvblastlink=`lynx -dump https://github.com/videolan/dvblast/releases | awk  '/http/{print $2}' | grep tar.gz | head -n 1`
+sudo wget -O /root/Downloads/TempDL/dvblast2.2.tar.gz https://github.com/gfto/dvblast/archive/2.2.tar.gz
+sudo mkdir -p /root/Downloads/TempDL/dvblast2.2
+sudo tar xzvf /root/Downloads/TempDL/dvblast2.2 -C /root/Downloads/TempDL/dvblast-latest --strip-components 1
+cd /root/Downloads/TempDL/dvblast2.2/
+make
+make insall
+;;
+
+28)
+
+#DELUGE
+sudo wget -O /root/Downloads/TempDL/nux-dextop-release-0-5.el7.nux.noarch.rpm http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+sudo rpm -ivh /root/Downloads/TempDL/nux-dextop-release-0-5.el7.nux.noarch.rpm
+sudo yum install deluge-console -y
 ;;
 
         esac
