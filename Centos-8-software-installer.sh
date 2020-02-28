@@ -20,7 +20,7 @@ options=("PHP7.4 ${opts[1]}" "Nginx ${opts[2]}" "FFMPEG ${opts[3]}" "GCC8.3 - 9.
 "Apache2 ${opts[8]}" "Monitoring Tools ${opts[9]}" "Transmission-cli ${opts[10]}" "Nmap ${opts[11]}" "Irssi (IRC) ${opts[12]}" "Timeshift ${opts[13]}" 
 "Jenkins ${opts[14]}" "Docker (Temporarily Inactive) ${opts[15]}" "Weechat 2.6 (IRC) ${opts[16]}" "Quassel (IRC) ${opts[17]}" "Neofetch ${opts[18]}" "GNU Emacs ${opts[19]}" 
 "Kubectl ${opts[20]}" "Magic Wormhole ${opts[21]}" "Neovim ${opts[22]}" "OpenJDK 8 JDK ${opts[23]}" "OpenJDK 11 JDK ${opts[24]}" "DVBlast3.4 ${opts[25]}" 
-"Deluge ${opts[26]}" "Done ${opts[29]}")
+"Done ${opts[26]}")
     select opt in "${options[@]}"
     do
         case $opt in
@@ -124,14 +124,10 @@ options=("PHP7.4 ${opts[1]}" "Nginx ${opts[2]}" "FFMPEG ${opts[3]}" "GCC8.3 - 9.
                 choice 25
                 break
                 ;;
-            "Deluge ${opts[26]}")
-                choice 26
-                break
-                ;;
-            "Done ${opts[27]}")
+            "Done ${opts[26]}")
                 break 2
                 ;;
-            *) printf '%s\n' 'Please Choose Between 1-27';;
+            *) printf '%s\n' 'Please Choose Between 1-26';;
         esac
     done
 done
@@ -175,12 +171,6 @@ sudo echo 'export PATH="$PATH:/snap/bin/"' >> /etc/profile
 source /etc/profile
 printf "\n"
 
-# Epel and Remi Repositories Folder
-if [ -d "/root/Downloads/epel-and-remi-repositories/" ];then
-:
-else
-sudo mkdir -pv /root/Downloads/epel-and-remi-repositories/
-fi
 # Downloaded tmp files
 if [ -d "/root/Downloads/TempDL/" ];then
 :
@@ -213,19 +203,19 @@ elif [ "$phpversion" = "3" ];then
     echo "Out of option(s) please choose between 1-3"
     :
 fi
-printf "\nPHP 7 installation Has Finished\n\n"
+printf "\nPHP 7 Installation Has Finished\n\n"
 ;;
 
 2)
 #NGINX 
-sudo yum install nginx -y
+sudo yum -y install nginx 
 sudo systemctl start nginx
 sudo systemctl enable nginx
 sudo firewall-cmd --permanent --zone=public --add-service=http 
 sudo firewall-cmd --permanent --zone=public --add-service=https
 sudo firewall-cmd --reload
 
-printf "\nNginx installation Has Finished\n\n"
+printf "\nNginx Installation Has Finished\n\n"
 ;;
 
 3)
@@ -234,10 +224,10 @@ printf "\nPlease Choose Your Desired FFmpeg Version\n\n1-)FFmpeg Stable\n2-)FFmp
 read ffmpegversion
 if [ "$ffmpegversion" = "1" ];then
     sudo snap install ffmpeg
-    printf "\nFFmpeg Stable installation Has Finished\n\n"
+    printf "\nFFmpeg Stable Installation Has Finished\n\n"
 elif [ "$ffmpegversion" = "2" ];then
     sudo snap install ffmpeg --edge
-    printf "\nFFmpeg Latest (Edge) installation Has Finished\n\n"
+    printf "\nFFmpeg Latest (Edge) Installation Has Finished\n\n"
 else
     echo "Out of option(s) please choose between 1-2"
     :
@@ -249,10 +239,10 @@ fi
 printf "\nPlease Choose Your Desired GCC Version\n\n1-)GCC 8.3\n2-)GCC 9.2\n"
 read gccversion
 if [ "$gccversion" = "1" ];then
-    sudo yum install gcc -y
-    printf "\nGCC 8.3 installation Has Finished\n\n"
+    sudo yum -y install gcc 
+    printf "\nGCC 8.3 Installation Has Finished\n\n"
 elif [ "$gccversion" = "2" ];then
-    sudo yum install gcc gcc-c++ -y
+    sudo yum -y install gcc gcc-c++ 
     sudo wget -O /root/Downloads/TempDL/gcc-9.2.0.tar.gz https://ftp.gnu.org/gnu/gcc/gcc-9.2.0/gcc-9.2.0.tar.gz
     sudo mkdir -pv /root/Downloads/TempDL/gcc-9.2.0
     sudo tar xvf /root/Downloads/TempDL/gcc-9.2.0.tar.gz -C /root/Downloads/TempDL/gcc-9.2.0 --strip-components 1
@@ -265,14 +255,14 @@ elif [ "$gccversion" = "2" ];then
     make install
     export PATH=/usr/local/bin:$PATH
     export LD_LIBRARY_PATH=/usr/local/lib64:$LD_LIBRARY_PATH
-    printf "\nGCC 9.2 installation Has Finished\n\n"
+    printf "\nGCC 9.2 Installation Has Finished\n\n"
 fi
 ;;
 
 5)
 #G++
-sudo yum install gcc-c++ -y
-printf "\nG++ installation Has Finished\n\n"
+sudo yum -y install gcc-c++ 
+printf "\nG++ Installation Has Finished\n\n"
 ;;
 
 6)
@@ -280,11 +270,11 @@ printf "\nG++ installation Has Finished\n\n"
 printf "\nPlease Choose Your Desired Installation Version\n\n1-)Cmake (From Official Repository) \n2-)Cmake (snap)(Newer version)\n"
 read cmakeversion
 if [ "$cmakeversion" = "1" ];then
-    sudo yum install cmake -y
-    printf "\nCmake installation Has Finished\n\n"
+    sudo yum -y install cmake 
+    printf "\nCmake Installation Has Finished\n\n"
 elif [ "$cmakeversion" = "2" ];then
     sudo snap install cmake --classic
-    printf "\nCmake installation Has Finished\n\n"
+    printf "\nCmake Installation Has Finished\n\n"
 fi
 ;;
 
@@ -297,11 +287,11 @@ read vlcversion
 if [ "$vlcversion" = "1" ];then
     sudo yum -y install vlc python-vlc
     sudo sed -i 's/geteuid/getppid/' /usr/bin/vlc
-    printf "\nVLC installation Has Finished\n\n"
+    printf "\nVLC Installation Has Finished\n\n"
 elif [ "$vlcversion" = "2" ];then
     sudo yum -y install vlc-core
     sudo sed -i 's/geteuid/getppid/' /usr/bin/vlc
-    printf "\nVLC Core installation Has Finished\n\n"
+    printf "\nVLC Core Installation Has Finished\n\n"
 fi
 ;;
 
@@ -313,28 +303,28 @@ sudo systemctl enable httpd
 sudo firewall-cmd --zone=public --permanent --add-service=http
 sudo firewall-cmd --zone=public --permanent --add-service=https
 sudo firewall-cmd --reload
-printf "\nApache2 installation Has Finished\n\n"
+printf "\nApache2 Installation Has Finished\n\n"
 ;;
 
 9)
 #Monitoring Tools
 sudo yum -y install htop iftop atop powertop iotop apachetop
-printf "\nMonitoring Tools installation Has Finished\n\n"
+printf "\nMonitoring Tools Installation Has Finished\n\n"
 ;;
 
 10)
 #Transmission
-sudo wget -O /root/Downloads/epel-and-remi-repositories/geekery-release-8-2.noarch.rpm http://geekery.altervista.org/geekery/el8/x86_64/geekery-release-8-2.noarch.rpm
-sudo yum -y install /root/Downloads/epel-and-remi-repositories/geekery-release-8-2.noarch.rpm
+sudo wget -O /root/Downloads/TempDL/geekery-release-8-2.noarch.rpm http://geekery.altervista.org/geekery/el8/x86_64/geekery-release-8-2.noarch.rpm
+sudo yum -y install /root/Downloads/TempDL/geekery-release-8-2.noarch.rpm
 sudo yum -y install transmission
 sudo systemctl start transmission-daemon.service
-printf "\nTransmission installation Has Finished\n\n"
+printf "\nTransmission Installation Has Finished\n\n"
 ;;
 
 11)
 #Nmap
-sudo yum -y install
-printf "\nNmap official repository installation Has Finished\n\n"
+sudo yum -y install nmap
+printf "\nNmap Installation Has Finished\n\n"
 ;;
 
 12)
@@ -343,10 +333,10 @@ printf "\nPlease Choose Your Desired Irssi Version\n\n1-)Irssi (From Official Re
 read irssiversion
 if [ "$irssiversion" = "1" ];then
     sudo yum -y install irssi
-    printf "\nIrssi (From Official Repository) installation Has Finished\n\n"
+    printf "\nIrssi (From Official Repository) Installation Has Finished\n\n"
 elif [ "$irssiversion" = "2" ];then
     sudo snap install irssi
-    printf "\nIrssi (snap)(Newer version) installation Has Finished\n\n"
+    printf "\nIrssi (snap)(Newer version) Installation Has Finished\n\n"
 fi
 ;;
 
@@ -356,7 +346,7 @@ timeshiftlink=`lynx -dump https://github.com/teejee2008/timeshift/releases/ | aw
 sudo wget -O /root/Downloads/TempDL/timeshift-latest-amd64.run $timeshiftlink
 sudo chmod +x /root/Downloads/TempDL/timeshift-latest-amd64.run
 echo y | bash /root/Downloads/TempDL/timeshift-latest-amd64.run
-printf "\nInstall Timeshift from .run file (Newer version) installation Has Finished\n\n"
+printf "\nInstall Timeshift from .run file (Newer version) Installation Has Finished\n\n"
 ;;
 
 14)
@@ -364,12 +354,12 @@ printf "\nInstall Timeshift from .run file (Newer version) installation Has Fini
 sudo yum -y install java-1.8.0-openjdk
 sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
 sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
-sudo yum install jenkins -y
+sudo yum -y install jenkins 
 sudo systemctl start jenkins.service
 sudo systemctl enable jenkins.service
 sudo firewall-cmd --permanent --zone=public --add-port=8080/tcp
 sudo firewall-cmd --reload
-printf "\nJenkins installation Has Finished\n\n"
+printf "\nJenkins Installation Has Finished\n\n"
 ;;
 
 15)
@@ -379,7 +369,7 @@ printf "\nJenkins installation Has Finished\n\n"
 #sudo yum -y install docker-ce docker-ce-cli containerd.io --nobest
 #sudo systemctl start docker
 #sudo systemctl enable docker
-#printf "\nDocker installation Has Finished\n\n"
+#printf "\nDocker Installation Has Finished\n\n"
 ;;
 
 16)
@@ -395,13 +385,13 @@ cd build
 sudo cmake ..
 sudo make -j8
 sudo make install
-printf "\nWeechat 2.6 (IRC) installation Has Finished\n\n"
+printf "\nWeechat 2.6 (IRC) Installation Has Finished\n\n"
 ;;
 
 17)
 #Quassel (IRC)
 sudo snap install quassel-kalikiana
-printf "\nQuassel (IRC) installation Has Finished\n\n"
+printf "\nQuassel (IRC) Installation Has Finished\n\n"
 ;;
 
 18)
@@ -409,13 +399,13 @@ printf "\nQuassel (IRC) installation Has Finished\n\n"
 sudo yum -y install dnf-plugins-core
 curl -o /etc/yum.repos.d/konimex-neofetch-epel-7.repo https://copr.fedorainfracloud.org/coprs/konimex/neofetch/repo/epel-7/konimex-neofetch-epel-7.repo
 sudo yum -y install neofetch
-printf "\nNeofetch installation Has Finished\n\n"
+printf "\nNeofetch Installation Has Finished\n\n"
 ;;
 
 19)
 #Emacs
 sudo yum -y install emacs
-printf "\nEmacs installation Has Finished\n\n"
+printf "\nEmacs Installation Has Finished\n\n"
 ;;
 
 20)
@@ -429,19 +419,19 @@ gpgcheck=1
 repo_gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
-sudo yum install kubelet kubeadm kubectl -y
+sudo yum -y install kubelet kubeadm kubectl 
 sudo systemctl start kubelet 
 sudo systemctl enable kubelet
 printf "\n"
 kubectl version
-printf "\nKubectl installation Has Finished\n\n"
+printf "\nKubectl Installation Has Finished\n\n"
 ;;
 
 21)
 #Magic Wormhole
 sudo yum -y install python3-pip python3-devel
 sudo pip3 install magic-wormhole
-printf "\nMagic Wormhole installation Has Finished \n\n"
+printf "\nMagic Wormhole Installation Has Finished \n\n"
 ;;
 
 22)
@@ -461,26 +451,26 @@ elif [ "$neovimversion" = "2" ];then
     mkdir -p $HOME/opt
     make CMAKE_INSTALL_PREFIX=$HOME/opt install
     make install
-    printf "\n Neovim From Source (Newer version) installation Has Finished\n\n"
+    printf "\n Neovim From Source (Newer version) Installation Has Finished\n\n"
 fi
 ;;
 
 23)
 #OpenJDK 8 JDK
 sudo yum -y install java-1.8.0-openjdk-devel
-printf "\nOpenJDK 8 JDK installation Has Finished \n\n"
+printf "\nOpenJDK 8 JDK Installation Has Finished \n\n"
 ;;
 
 24)
 #OpenJDK 11 JDK
 
-sudo yum install java-11-openjdk-devel -y
-printf "\nOpenJDK 11 JDK installation Has Finished \n\n"
+sudo yum -y install java-11-openjdk-devel 
+printf "\nOpenJDK 11 JDK Installation Has Finished \n\n"
 ;;
 
 25)
 #DVBlast 3.4
-sudo yum install gcc make libev-devel -y
+sudo yum -y install gcc make libev-devel 
 sudo git clone https://github.com/gfto/bitstream.git /root/Downloads/TempDL/bitstream
 cd /root/Downloads/TempDL/bitstream/
 make install
@@ -490,15 +480,8 @@ sudo tar xvf /root/Downloads/TempDL/dvblast3.4.tar.gz -C /root/Downloads/TempDL/
 cd /root/Downloads/TempDL/dvblast3.4/
 make
 make install
+printf "\nDVBlast 3.4 Installation Has Finished \n\n"
 ;;
-
-26)
-#DELUGE
-sudo wget -O /root/Downloads/TempDL/nux-dextop-release-0-5.el7.nux.noarch.rpm http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
-sudo rpm -ivh /root/Downloads/TempDL/nux-dextop-release-0-5.el7.nux.noarch.rpm
-sudo yum install deluge-console -y
-;;
-
         esac
     fi
 done
