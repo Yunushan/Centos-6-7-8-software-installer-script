@@ -21,8 +21,8 @@ clear
 options=("PHP7.1 ${opts[1]}" "Nginx ${opts[2]}" "FFMPEG 3.4 ${opts[3]}" "GCC4.8 - 8.2 From Source ${opts[4]}" "G++ ${opts[5]}" "Cmake ${opts[6]}" "VLC ${opts[7]}"
 "Apache2 ${opts[8]}" "Monitoring Tools ${opts[9]}" "Transmission-cli ${opts[10]}" "Nmap ${opts[11]}" "Irssi (IRC) ${opts[12]}" "Timeshift ${opts[13]}" 
 "Jenkins ${opts[14]}" "Docker ${opts[15]}" "Weechat (IRC) ${opts[16]}" "Quassel (IRC) ${opts[17]}" "Neofetch ${opts[18]}" "GNU Emacs ${opts[19]}" 
-"Kubectl ${opts[20]}" "Magic Wormhole ${opts[21]}" "Neovim ${opts[22]}" "OpenJDK 8 JDK ${opts[23]}" "OpenJDK 11 JDK ${opts[24]}" "Oracle Java 8 JDK ${opts[25]}"
-"Oracle Java 11 JDK ${opts[26]}" "DVBlast2.2 ${opts[27]}" "Deluge ${opts[28]}" "Done ${opts[29]}")
+"Kubectl ${opts[20]}" "Magic Wormhole ${opts[21]}" "Neovim ${opts[22]}" "OpenJDK 8 JDK ${opts[23]}" "OpenJDK 11 JDK ${opts[24]}" 
+"Deluge ${opts[25]}" "Done ${opts[26]}")
     select opt in "${options[@]}"
     do
         case $opt in
@@ -122,26 +122,14 @@ options=("PHP7.1 ${opts[1]}" "Nginx ${opts[2]}" "FFMPEG 3.4 ${opts[3]}" "GCC4.8 
                 choice 24
                 break
                 ;;
-            "Oracle Java 8 JDK ${opts[25]}")
+            "Deluge ${opts[25]}")
                 choice 25
                 break
                 ;;
-            "Oracle Java 11 JDK ${opts[26]}")
-                choice 26
-                break
-                ;;
-            "DVBlast2.2 ${opts[27]}")
-                choice 27
-                break
-                ;;
-            "Deluge ${opts[28]}")
-                choice 28
-                break
-                ;;
-            "Done ${opts[29]}")
+            "Done ${opts[26]}")
                 break 2
                 ;;
-            *) printf '%s\n' 'Please Choose Between 1-29';;
+            *) printf '%s\n' 'Please Choose Between 1-26';;
         esac
     done
 done
@@ -165,26 +153,20 @@ fi
 
 printf "Installation starting"
 value=0
-while [ $value -lt 600 ]
-do
-value=$((value+20))
-printf "."
-sleep 0.05
+while [ $value -lt 600 ];do
+    value=$((value+20))
+    printf "."
+    sleep 0.05
 done
 printf "\n"
 
 
 #Necessary Packages
-sudo yum update -y
-sudo yum install wget curl mlocate nano lynx -y
+sudo yum -y update
+sudo yum -y install epel-release
+sudo yum -y install wget curl mlocate nano lynx net-tools htop git
 printf "\n"
 
-# Epel and Remi Repositories Folder
-if [ -d "/root/Downloads/epel-and-remi-repositories/" ];then
-:
-else
-sudo mkdir -pv /root/Downloads/epel-and-remi-repositories/
-fi
 # Downloaded tmp files
 if [ -d "/root/Downloads/TempDL/" ];then
 :
@@ -207,15 +189,15 @@ sudo yum install yum-utils
 printf "\nPlease Choose Your Desired PHP Version\n\n1-)PHP7.0\n2-)PHP7.1\n3-)PHP7.2\n4-)PHP7.3\n"
 read phpversion
 if [ "$phpversion" = "1" ];then
-sudo yum-config-manager --enable remi-php70
+    sudo yum-config-manager --enable remi-php70
 elif [ "$phpversion" = "2" ];then
-sudo yum-config-manager --enable remi-php71
+    sudo yum-config-manager --enable remi-php71
 elif [ "$phpversion" = "3" ];then
-sudo yum-config-manager --enable remi-php72
+    sudo yum-config-manager --enable remi-php72
 elif [ "$phpversion" = "4" ];then
-sudo yum-config-manager --enable remi-php73
+    sudo yum-config-manager --enable remi-php73
 else
-echo "Out of option Please Choose between 1-4"
+    echo "Out of option Please Choose between 1-4"
 :
 fi
 sudo yum install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo
@@ -224,9 +206,7 @@ printf "\nPHP 7 installation Has Finished\n\n"
 
 # 2- Nginx (PPA)
 2)
-
 #NGINX 
-
 sudo yum install epel-release -y
 sudo yum install nginx -y
 sudo systemctl start nginx
@@ -234,14 +214,11 @@ sudo systemctl enable nginx
 sudo firewall-cmd --permanent --zone=public --add-service=http 
 sudo firewall-cmd --permanent --zone=public --add-service=https
 sudo firewall-cmd --reload
-
 printf "\nNginx installation Has Finished\n\n"
 ;;
 
 3)
-
 #FFMPEG 
-
 sudo yum install epel-release -y
 sudo rpm -v --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
 sudo rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
@@ -250,49 +227,38 @@ printf "\nFFmpeg installation Has Finished\n\n"
 ;;
 
 4)
-
 #GCC4.8 - 8.3 From Source
-
 printf "\nPlease Choose Your Desired GCC Version\n\n1-)GCC 8.2\n2-)GCC 4.8\n"
 read gccversion
 if [ "$gccversion" = "1" ];then
-sudo wget -O /root/Downloads/TempDL/gcc-8.2.0.tar.gz https://ftp.gnu.org/gnu/gcc/gcc-8.2.0/gcc-8.2.0.tar.gz
-sudo mkdir -pv /root/Downloads/TempDL/gcc-8.2.0
-sudo tar xzvf /root/Downloads/TempDL/gcc-8.2.0.tar.gz -C /root/Downloads/TempDL/gcc-8.2.0 --strip-components 1
-cd /root/Downloads/TempDL/gcc-8.2.0
-./contrib/download_prerequisites
-sudo mkdir -pv gcc-8.2.0-build
-cd gcc-8.2.0-build
-../gcc-8.2.0/configure --enable-languages=c,c++ --disable-multilib
-make -j 4
-make install
-printf "\nGCC 8.2 installation Has Finished\n\n"
-
+    sudo wget -O /root/Downloads/TempDL/gcc-8.2.0.tar.gz https://ftp.gnu.org/gnu/gcc/gcc-8.2.0/gcc-8.2.0.tar.gz
+    sudo mkdir -pv /root/Downloads/TempDL/gcc-8.2.0
+    sudo tar xzvf /root/Downloads/TempDL/gcc-8.2.0.tar.gz -C /root/Downloads/TempDL/gcc-8.2.0 --strip-components 1
+    cd /root/Downloads/TempDL/gcc-8.2.0
+    ./contrib/download_prerequisites
+    sudo mkdir -pv gcc-8.2.0-build
+    cd gcc-8.2.0-build
+    ../gcc-8.2.0/configure --enable-languages=c,c++ --disable-multilib
+    make -j 4
+    make install
+    printf "\nGCC 8.2 installation Has Finished\n\n"
 elif [ "$gccversion" = "2" ];then
-sudo yum install gcc -y
-
-printf "\nGCC 4.8 installation Has Finished\n\n"
+    sudo yum install gcc -y
+    printf "\nGCC 4.8 installation Has Finished\n\n"
 fi
 ;;
 
 5)
-
 #G++
-
 sudo yum install gcc-c++ -y
-
 ;;
 
 6)
-
 #Cmake
-
 sudo yum install cmake -y
-
 ;;
 
 7)
-
 #VLC
 sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -y
 sudo yum install https://download1.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm -y
@@ -304,59 +270,39 @@ sudo sed -i 's/geteuid/getppid/' /usr/bin/vlc
 
 #Apache2
 sudo yum install httpd -y
-
 ;;
 
 9)
-
 #Monitoring Tools
 sudo yum install htop iftop atop glances monit powertop iotop apachetop -y
-
 ;;
 
 10)
-
 #Transmission-cli
-
 sudo yum install transmission-cli transmission-common transmission-daemon -y
 sudo systemctl enable transmission-daemon
 sudo systemctl start transmission-daemon
 sudo firewall-cmd --permanent --zone=public --add-port=9091/tcp
 sudo firewall-cmd --reload
-
 ;;
 
 11)
-
 #Nmap
-
-if [ "$cpuarch" = "x86_64" ];then
-
 nmap64=`lynx -dump https://nmap.org/dist/ | awk '/nmap-7.*\.x86_64.rpm$/{url=$2}END{print url}'`
 sudo rpm -Uvh $nmap64
-
-elif [ "$cpuarch" = "x86" ] || [ "$cpuarch" = "i386" ] || [ "$cpuarch" = "i486" ] || [ "$cpuarch" = "i586" ] || [ "$cpuarch" = "i686" ];then
-nmap32=`lynx -dump https://nmap.org/dist/ | awk '/nmap-7.*\.i686.rpm$/{url=$2}END{print url}'`
-sudo rpm -Uvh $nmap32
-fi
 ;;
 
 12)
-
 #Irssi (IRC)
-
 sudo yum install irssi -y
 ;;
 
 13)
-
 #Timeshift
-
 sudo yum install timeshift -y
 ;;
 
 14)
-
 #Jenkins
 sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
 sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
@@ -365,11 +311,9 @@ sudo systemctl start jenkins.service
 sudo systemctl enable jenkins.service
 sudo firewall-cmd --permanent --zone=public --add-port=8080/tcp
 sudo firewall-cmd --reload
-
 ;;
 
 15)
-
 #Docker
 sudo yum install yum-utils device-mapper-persistent-data lvm2 -y
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -379,35 +323,29 @@ sudo systemctl enable docker
 ;;
 
 16)
-
 #Weechat (IRC)
 sudo yum install weechat -y
 ;;
 
 17)
-
 #Quassel (IRC)
 sudo yum install quassel -y
 ;;
 
 18)
-
 #Neofetch
 sudo yum install epel-release dnf -y
 curl -o /etc/yum.repos.d/konimex-neofetch-epel-7.repo https://copr.fedorainfracloud.org/coprs/konimex/neofetch/repo/epel-7/konimex-neofetch-epel-7.repo
 sudo dnf install neofetch -y
-
 ;;
 
 19)
-
-#Neofetch
+#Emacs
 sudo yum install epel-release -y
 sudo yum install emacs -y
 ;;
 
 20)
-
 #Kubectl
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -424,63 +362,27 @@ sudo systemctl enable kubelet
 ;;
 
 21)
-
 #Magic Wormhole
-
 sudo yum install python-pip python-devel -y
 sudo pip install magic-wormhole
 ;;
 
 22)
-
 #Neovim
-
 sudo yum install neovim -y
 ;;
 
 23)
-
 #OpenJDK 8 JDK
-
 sudo yum install java-1.8.0-openjdk-devel -y
 ;;
 
 24)
-
 #OpenJDK 11 JDK
-
 sudo yum install java-11-openjdk-devel -y
 ;;
 
 25)
-
-#Oracle Java 8 JDK
-
-sudo yum install java-1.8.0-openjdk -y
-;;
-
-26)
-
-#Oracle Java 11 JDK
-sudo wget -O /root/Downloads/TempDL/jdk-11.0.2_linux-x64_bin.rpm --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie"   "http://download.oracle.com/otn-pub/java/jdk/11.0.2+9/f51449fcd52f4d52b93a989c5c56ed3c/jdk-11.0.2_linux-x64_bin.rpm"
-sudo rpm -Uvh /root/Downloads/TempDL/jdk-11.0.2_linux-x64_bin.rpm
-;;
-
-27)
-
-#DVBlast 2.2
-sudo yum install gcc -y
-dvblastlink=`lynx -dump https://github.com/videolan/dvblast/releases | awk  '/http/{print $2}' | grep tar.gz | head -n 1`
-sudo wget -O /root/Downloads/TempDL/dvblast2.2.tar.gz https://github.com/gfto/dvblast/archive/2.2.tar.gz
-sudo mkdir -p /root/Downloads/TempDL/dvblast2.2
-sudo tar xzvf /root/Downloads/TempDL/dvblast2.2 -C /root/Downloads/TempDL/dvblast-latest --strip-components 1
-cd /root/Downloads/TempDL/dvblast2.2/
-make
-make insall
-;;
-
-28)
-
 #DELUGE
 sudo wget -O /root/Downloads/TempDL/nux-dextop-release-0-5.el7.nux.noarch.rpm http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
 sudo rpm -ivh /root/Downloads/TempDL/nux-dextop-release-0-5.el7.nux.noarch.rpm
